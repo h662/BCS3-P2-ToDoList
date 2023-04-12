@@ -89,4 +89,31 @@ router.put("/:id/done", async (req, res) => {
   }
 });
 
+// 투두 삭제
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existTodo = await prisma.todo.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!existTodo) {
+      return res.status(400).json({ ok: false, error: "Not exist todo." });
+    }
+
+    const deletedTodo = await prisma.todo.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.json({ ok: true, todo: deletedTodo });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 module.exports = router;
