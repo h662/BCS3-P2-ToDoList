@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 // 신규 유저 생성
 router.post("/", async (req, res) => {
   try {
-    const user = await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         account: "abcd",
       },
@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
 
     res.json({
       ok: true,
-      user,
+      user: newUser,
     });
   } catch (error) {
     console.error(error);
