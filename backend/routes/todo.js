@@ -9,6 +9,13 @@ router.post("/", async (req, res) => {
   try {
     const { todo, userId } = req.body;
 
+    if (!todo) {
+      return res.status(400).json({ ok: false, error: "Not exist todo." });
+    }
+    if (!userId) {
+      return res.status(400).json({ ok: false, error: "Not exist userId." });
+    }
+
     const newTodo = await prisma.todo.create({
       data: {
         todo,
