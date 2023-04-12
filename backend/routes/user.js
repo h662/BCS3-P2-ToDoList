@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
     if (!user) {
       return res.status(400).json({
         ok: false,
-        error: "Not exist account.",
+        error: "Not exist user.",
       });
     }
 
