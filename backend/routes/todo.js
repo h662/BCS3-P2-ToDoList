@@ -59,4 +59,34 @@ router.get("/", async (req, res) => {
   }
 });
 
+// 투두 완료
+router.put("/:id/done", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existTodo = await prisma.todo.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!existTodo) {
+      return res.status(400).json({ ok: false, error: "Not exist todo." });
+    }
+
+    const updatedTodo = await prisma.todo.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        isDone: !existTodo.isDone,
+      },
+    });
+
+    res.json({ ok: true, todo: updatedTodo });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 module.exports = router;
