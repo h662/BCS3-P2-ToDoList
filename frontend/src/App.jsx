@@ -4,13 +4,25 @@ import LogIn from "./components/LogIn";
 function App() {
   const [account, setAccount] = useState("");
 
+  const onClickLogOut = () => {
+    setAccount("");
+  };
+
   if (!account) {
     return <LogIn setAccount={setAccount} />;
   }
 
   return (
     <div className="min-h-screen flex flex-col justify-start items-center pt-16">
-      <h1 className="text-4xl font-bold">{account}님 환영합니다! 🚀</h1>
+      <h1 className="text-4xl font-bold flex justify-center items-center">
+        {account}님 환영합니다! 🚀
+        <button
+          className="ml-4 px-2 py-1 text-base border-2 border-pink-200 text-pink-200 rounded-lg hover:border-pink-400 hover:text-pink-400"
+          onClick={onClickLogOut}
+        >
+          로그아웃
+        </button>
+      </h1>
       <div>
         <div className="mt-8 text-sm font-semibold">
           If I only had an hour to chop down a tree, I would spend the first 45
