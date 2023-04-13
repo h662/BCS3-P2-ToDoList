@@ -8,15 +8,27 @@ const prisma = new PrismaClient();
 // 신규 유저 생성
 router.post("/", async (req, res) => {
   try {
-    const newUser = await prisma.user.create({
+    const { account } = req.body;
+
+    const existUser = await prisma.user.findUnique({
+      where: {
+        account,
+      },
+    });
+
+    if (existUser) {
+      return res.status(400).json({ ok: false, error: "Already exist user." });
+    }
+
+    const user = await prisma.user.create({
       data: {
-        account: "abcd",
+        account,
       },
     });
 
     res.json({
       ok: true,
-      user: newUser,
+      user,
     });
   } catch (error) {
     console.error(error);
