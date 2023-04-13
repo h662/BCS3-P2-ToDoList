@@ -40,20 +40,20 @@ router.get("/", async (req, res) => {
       return res.status(400).json({ ok: false, error: "Not exist userId." });
     }
 
-    const todo = await prisma.todo.findMany({
+    const todos = await prisma.todo.findMany({
       where: {
         userId,
       },
     });
 
-    if (!todo) {
+    if (!todos) {
       return res.status(400).json({
         ok: false,
         error: "Not exist todo.",
       });
     }
 
-    res.json({ ok: true, todo });
+    res.json({ ok: true, todos });
   } catch (error) {
     console.error(error);
   }
