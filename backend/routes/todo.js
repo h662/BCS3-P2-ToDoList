@@ -8,20 +8,30 @@ const prisma = new PrismaClient();
 // 투두 생성
 router.post("/", async (req, res) => {
   try {
-    const { todo, userId } = req.body;
+    const { todo, account } = req.body;
 
     if (!todo) {
       return res.status(400).json({ ok: false, error: "Not exist todo." });
     }
-    if (!userId) {
-      return res.status(400).json({ ok: false, error: "Not exist userId." });
+    if (!account) {
+      return res.status(400).json({ ok: false, error: "Not exist account." });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        account,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ ok: false, error: "Not exist user." });
     }
 
     const newTodo = await prisma.todo.create({
       data: {
         todo,
         isDone: false,
-        userId: parseInt(userId),
+        userId: user.id,
       },
     });
 
@@ -34,24 +44,13 @@ router.post("/", async (req, res) => {
 // 투두 조회
 router.get("/", async (req, res) => {
   try {
-    const { userId } = req.body;
-
-    if (!userId) {
-      return res.status(400).json({ ok: false, error: "Not exist userId." });
-    }
+    const { account } = req.body;
 
     const todos = await prisma.todo.findMany({
       where: {
-        userId,
+        account,
       },
     });
-
-    if (!todos) {
-      return res.status(400).json({
-        ok: false,
-        error: "Not exist todo.",
-      });
-    }
 
     res.json({ ok: true, todos });
   } catch (error) {

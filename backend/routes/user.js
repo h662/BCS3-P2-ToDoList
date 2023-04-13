@@ -40,8 +40,6 @@ router.get("/", async (req, res) => {
   try {
     const { account } = req.query;
 
-    console.log(account);
-
     const user = await prisma.user.findUnique({
       where: {
         account,
