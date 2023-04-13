@@ -1,4 +1,17 @@
-const TodoCard = ({ todo, isDone }) => {
+import axios from "axios";
+import { FiTrash2 } from "react-icons/fi";
+
+const TodoCard = ({ todo, isDone, id, getTodos }) => {
+  const onClickDelete = async () => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/todo/${id}`);
+
+      getTodos();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="flex my-4">
       {isDone ? (
@@ -15,6 +28,12 @@ const TodoCard = ({ todo, isDone }) => {
           <div className="text-2xl ml-4 truncate">{todo}</div>
         </>
       )}
+      <button
+        className="ml-4 hover:text-pink-400 hover:scale-125 ease-linear duration-300"
+        onClick={onClickDelete}
+      >
+        <FiTrash2 size={24} />
+      </button>
     </div>
   );
 };
